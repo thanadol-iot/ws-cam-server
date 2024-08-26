@@ -132,15 +132,14 @@ let options = {
   ffmpegOptions: {
     '-stats': '',
     '-r': 30,
-    '-b:v': '1M',
-    '-bufsize': '2M',
-    '-maxrate': '1M',
-    '-an': '',
-    // '-b:a': '128k',
+    '-b:v': '800k', // Reduced video bitrate
+    '-bufsize': '1M', // Reduced buffer size
+    '-maxrate': '800k', // Maximum video bitrate
+    '-an': '', // Disable audio
     '-vf': 'scale=854:480',
     '-c:v': 'libx264',
-    '-preset': 'faster',
-    '-crf': '25',
+    '-preset': 'ultrafast', // Faster preset for debugging
+    '-crf': '23',
   },
 };
 
@@ -170,13 +169,42 @@ function startStream() {
   stream.on('exitWithError', restartStream);
 }
 
+// function handleFFmpegStderr(stderr) {
+//   console.error('FFmpeg STDERR:', stderr.toString());
+//   if (stderr.toString().includes('Conversion failed!')) {
+//     console.log('Conversion failed detected, restarting stream...');
+//     restartStream();
+//   }
+// }
+
 function handleFFmpegStderr(stderr) {
-  console.error('FFmpeg STDERR:', stderr.toString());
-  if (stderr.toString().includes('Conversion failed!')) {
+  const errorMessage = stderr.toString();
+  console.error('FFmpeg STDERR:', errorMessage);
+  
+  // ตรวจสอบข้อความข้อผิดพลาดเฉพาะและดำเนินการที่เหมาะสม
+  if (errorMessage.includes('Conversion failed!')) {
     console.log('Conversion failed detected, restarting stream...');
     restartStream();
   }
+
+  // ตรวจสอบข้อผิดพลาดอื่น ๆ ที่เป็นไปได้
+  if (errorMessage.includes('Broken pipe')) {
+    console.error('Broken pipe detected, restarting stream...');
+    restartStream();
+  }
+
+  // ตรวจสอบข้อผิดพลาดเกี่ยวกับความเร็วของเฟรม
+  if (errorMessage.includes('Too many packets')) {
+    console.warn('Too many packets detected, possible frame drop. Consider adjusting bitrate.');
+  }
+
+  // ตรวจสอบข้อผิดพลาดอื่น ๆ ที่อาจเกิดขึ้น
+  if (errorMessage.includes('Error muxing a packet')) {
+    console.error('Error muxing a packet, attempting to restart stream...');
+    restartStream();
+  }
 }
+
 
 function restartStream() {
   console.log('\nRestarting stream...\n');
