@@ -24,14 +24,15 @@ let options = {
   ffmpegOptions: {
     '-stats': '',
     '-r': 30,
-    // '-b:v': '600', // Reduced video bitrate
-    // '-bufsize': '512k', // Reduced buffer size
-    // '-maxrate': '800k', // Maximum video bitrate
-    // '-an': '', // Disable audio
-    // '-vf': 'scale=854:480',
-    // '-c:v': 'libx264',
-    // '-preset': 'ultrafast', // Faster preset for debugging
-    // '-crf': '23',
+    '-b:v': '600', // Reduced video bitrate
+    '-bufsize': '512k', // Reduced buffer size
+    '-maxrate': '800k', // Maximum video bitrate
+    '-an': '', // Disable audio
+    '-vf': 'scale=854:480',
+    '-c:v': 'libx264',
+    '-preset': 'ultrafast', // Faster preset for debugging
+    '-crf': '23',
+    '-max_muxing_queue_size': '4096'
     // '-loglevel': 'debug', // More detailed logs
   },
 };
