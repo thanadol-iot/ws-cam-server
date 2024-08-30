@@ -32,8 +32,8 @@ let options = {
     '-c:v': 'libx264',
     '-preset': 'ultrafast', // Faster preset for debugging
     '-crf': '23',
-    '-max_muxing_queue_size': '4096'
-    // '-loglevel': 'debug', // More detailed logs
+    '-max_muxing_queue_size': '4096',
+    '-loglevel': 'debug', // More detailed logs
   },
 };
 
