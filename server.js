@@ -33,7 +33,7 @@ let options = {
     '-preset': 'ultrafast', // Faster preset for debugging
     '-crf': '23',
     '-max_muxing_queue_size': '4096',
-    '-loglevel': 'debug', // More detailed logs
+    // '-loglevel': 'debug', // More detailed logs
   },
 };
 
